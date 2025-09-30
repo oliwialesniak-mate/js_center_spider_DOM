@@ -15,21 +15,27 @@ document.addEventListener('DOMContentLoaded', () => {
     wall.style.position = 'relative';
   }
 
+  // Spider should be absolutely positioned inside the wall
+  spider.style.position = 'absolute';
+
   const centerSpider = () => {
     const wallRect = wall.getBoundingClientRect();
     const spiderRect = spider.getBoundingClientRect();
 
-    const centerX = (wall.clientWidth - spider.offsetWidth) / 2;
-    const centerY = (wall.clientHeight - spider.offsetHeight) / 2;
+    const centerX = (wallRect.width - spiderRect.width) / 2;
+    const centerY = (wallRect.height - spiderRect.height) / 2;
 
-    spider.style.position = 'absolute';
     spider.style.left = centerX + 'px';
     spider.style.top = centerY + 'px';
   };
 
-  // Initial centering
-  centerSpider();
+  // Wait until the spider image is fully loaded
+  if (spider.complete) {
+    centerSpider();
+  } else {
+    spider.addEventListener('load', centerSpider);
+  }
 
-  // Recalculate on window resize for responsiveness
+  // Recalculate on resize
   window.addEventListener('resize', centerSpider);
 });
